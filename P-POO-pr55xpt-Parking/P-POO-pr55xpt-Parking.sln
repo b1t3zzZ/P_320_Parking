@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.14.36327.8 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P_POO_Parking", "P_POO_Parking\P_POO_Parking.csproj", "{66E67F03-F4A0-424F-86F6-86A160CF80CB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "P-POO-pr55xpt-Parking", "P-POO-pr55xpt-Parking\P-POO-pr55xpt-Parking.csproj", "{9A775898-9EFA-4073-8498-388BC7C65ECF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{66E67F03-F4A0-424F-86F6-86A160CF80CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{66E67F03-F4A0-424F-86F6-86A160CF80CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{66E67F03-F4A0-424F-86F6-86A160CF80CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{66E67F03-F4A0-424F-86F6-86A160CF80CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A775898-9EFA-4073-8498-388BC7C65ECF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A775898-9EFA-4073-8498-388BC7C65ECF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A775898-9EFA-4073-8498-388BC7C65ECF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A775898-9EFA-4073-8498-388BC7C65ECF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {666CC8DA-1A38-4045-AD24-2EDA6C7DBD6D}
+		SolutionGuid = {0860D6A8-213D-42D2-A5E8-E482E015216F}
 	EndGlobalSection
 EndGlobal
