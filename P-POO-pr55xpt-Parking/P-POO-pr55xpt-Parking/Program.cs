@@ -4,7 +4,11 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Console.WriteLine("=== éTAT DU PARKING ===");
+            Console.WriteLine("Places totales: ");
+            Console.WriteLine("Places occupées: ");
+            Console.WriteLine("Places libres: ");
+            Console.WriteLine("Taux d'occupation: ");
         }
     }
 }
