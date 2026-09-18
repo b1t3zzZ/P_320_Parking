@@ -8,7 +8,6 @@ namespace P_POO_pr55xpt_Parking
 {
     internal class ParkingSpot
     {
-
         public int Number { get; private set;}
         public bool IsOccuped { get; private set;}
         public Vehicule? VehiculePark { get; private set;}
