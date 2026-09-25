@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -43,28 +44,62 @@ namespace P_POO_pr55xpt_Parking
 
         public Ticket? EnterVehicle(string plaque)
         {
-            if(Vehicule.IsValidPlate(plaque)  == false)
+            if(Vehicule.IsValidPlate(plaque) == false)
             {
                 Console.WriteLine("Ce n'est pas une bonne plaque");
                 return null;
             }
             else
             {
-                if(FindFirstFreeSpot() == null)
+                ParkingSpot? place = FindFirstFreeSpot();
+
+                if (place == null)
                 {
                     Console.WriteLine("Il n'y a pas de place librés");
+                    return null;
                 }
                 else
                 {
                     Vehicule v1 = new Vehicule(plaque);
-                    Ticket ticket = new Ticket(v1);
-                    ParkingSpot.Park(v1, ticket);
+                    Ticket ticket = new Ticket(v1, place.Number, HourlyRate);
+                    place.Park(v1, ticket);
+
+                    return ticket;
                 }
             }
+        }
+
+        public Ticket? SortVehicle(string? plaque = null, int? place = null)
+        {
+            
+
+            foreach (var spot in Spots)
+            {
+
+                if (spot.IsOccuped == true && spot.Number == place)
+                {
+                    spot.Release();
+
+                    return 
+                    
+                }
+                if(spot.IsOccuped == true && spot.VehiculePark.LicencePlate == plaque)
+                {
+                    spot.Release();
+                }
+
+            }
+            return null;
 
         }
 
-        
+        public override string ToString()
+        {
+            Ticket? ticket = null;
+
+            return $"L'heure d'entrée: {ticket.EntryTime}, l'heure de sortie: {ticket.ParkDuration(ticket.EntryTime)}," +
+                    $" Montant à payer: {ticket.SumPayement(ticket.EntryTime)}";
+        }
 
     }
 }
