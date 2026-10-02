@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace P_POO_pr55xpt_Parking
 {
-    internal class Vehicule
+    public class Vehicule
     {
         public string LicencePlate {get; private set; }
         public Vehicule(string plate)

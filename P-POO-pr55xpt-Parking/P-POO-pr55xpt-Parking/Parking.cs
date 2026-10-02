@@ -46,7 +46,7 @@ namespace P_POO_pr55xpt_Parking
         {
             if(Vehicule.IsValidPlate(plaque) == false)
             {
-                Console.WriteLine("Ce n'est pas une bonne plaque");
+                Console.WriteLine("\nCe n'est pas une bonne plaque\n");
                 return null;
             }
             else
@@ -55,7 +55,7 @@ namespace P_POO_pr55xpt_Parking
 
                 if (place == null)
                 {
-                    Console.WriteLine("Il n'y a pas de place librés");
+                    Console.WriteLine("\nIl n'y a pas de place librés\n");
                     return null;
                 }
                 else
@@ -70,22 +70,21 @@ namespace P_POO_pr55xpt_Parking
         }
 
         public Ticket? SortVehicle(string? plaque = null, int? place = null)
-        {
-            
-
+        {       
             foreach (var spot in Spots)
             {
 
                 if (spot.IsOccuped == true && spot.Number == place)
                 {
+                    Ticket? t = spot.ActiveTicket;           // Создание тикета для его возврата после обнуления в release
                     spot.Release();
-
-                    return 
-                    
+                    return t;
                 }
-                if(spot.IsOccuped == true && spot.VehiculePark.LicencePlate == plaque)
+                if(spot.IsOccuped == true && spot.VehiculePark?.LicencePlate == plaque)
                 {
+                    Ticket? t = spot.ActiveTicket;
                     spot.Release();
+                    return t;
                 }
 
             }
@@ -93,13 +92,6 @@ namespace P_POO_pr55xpt_Parking
 
         }
 
-        public override string ToString()
-        {
-            Ticket? ticket = null;
-
-            return $"L'heure d'entrée: {ticket.EntryTime}, l'heure de sortie: {ticket.ParkDuration(ticket.EntryTime)}," +
-                    $" Montant à payer: {ticket.SumPayement(ticket.EntryTime)}";
-        }
 
     }
 }

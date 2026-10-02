@@ -41,7 +41,7 @@ namespace P_POO_pr55xpt_Parking
         public override string ToString() 
         {
 
-            return EntryTime.ToString() + " " + GivenPlace + " " + tarifPerHour; 
+            return "\nHeure d'entrée: " + EntryTime.ToString() + "\nPlace: " + GivenPlace + "\nTarif Horaire: " + tarifPerHour + "\n"; 
 
         }
     }
