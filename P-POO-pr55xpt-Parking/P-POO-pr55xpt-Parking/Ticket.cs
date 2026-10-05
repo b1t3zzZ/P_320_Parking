@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace P_POO_pr55xpt_Parking
 {
-    internal class Ticket
+    public class Ticket
     {
         public int TicketId { get; private set; }
         public Vehicule? VehiculePark { get; private set; }
@@ -23,6 +23,7 @@ namespace P_POO_pr55xpt_Parking
         
         }
 
+        //La methode pour calculer le temps restant dans le parking
         public TimeSpan ParkDuration(DateTime exitTime)
         {
 
@@ -30,6 +31,7 @@ namespace P_POO_pr55xpt_Parking
 
         }
 
+        //La methode pour caluler la somme à payer en fonctionne de temps resté
         public decimal SumPayement(DateTime exitTime)
         {
 
@@ -38,6 +40,8 @@ namespace P_POO_pr55xpt_Parking
             return Math.Round(durationParking, 2) * tarifPerHour;
 
         }
+
+        //L'affichage de ticket
         public override string ToString() 
         {
 

@@ -17,6 +17,8 @@ namespace P_POO_pr55xpt_Parking
 
         }
 
+
+        //Cette methode est utilisé pour verifier si on a bien entré la plaque
          public static bool IsValidPlate(string plate)
         {
 
@@ -24,6 +26,7 @@ namespace P_POO_pr55xpt_Parking
 
         }
 
+        //Nouvelle affichage de plaque
         public override string ToString()
         {
 
