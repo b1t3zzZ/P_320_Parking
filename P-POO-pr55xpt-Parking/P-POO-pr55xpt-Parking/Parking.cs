@@ -12,15 +12,16 @@ namespace P_POO_pr55xpt_Parking
         public ParkingSpot[] Spots { get; private set; }
         public int Capacity { get; private set; }
         public decimal HourlyRate { get; private set; }
-
-        const int TAILLEDETABLLEAU = 50;
+        public decimal TotalPaid { get; private set; }
+        public List<string> Transactions { get; private set; }
 
         public Parking(int capacity, decimal hourlyRate) 
         {
             this.Capacity = capacity;
             this.Spots = new ParkingSpot[capacity];
             this.HourlyRate = hourlyRate;
-
+            this.Transactions = new List<string>();
+            
             for (int i = 0; i < capacity; i++)                                     //On entre dans la liste toute les parking spots
             {
 
@@ -55,6 +56,16 @@ namespace P_POO_pr55xpt_Parking
             }
             else                                                                  //Si oui, on cherche la place
             {
+                
+                foreach (var spot in Spots)                                       // Vérification si la voiture est déjà dans le parking
+                {
+                    if (spot.IsOccuped == true && spot.VehiculePark?.LicencePlate == plaque)
+                    {
+                        Console.WriteLine("\nCe véhicule est déjà dans le parking\n");
+                        return null;
+                    }
+                }
+                
                 ParkingSpot? place = FindFirstFreeSpot();
 
                 if (place == null)                                                //Au cas si la place est null
@@ -67,31 +78,52 @@ namespace P_POO_pr55xpt_Parking
                     Vehicule v1 = new Vehicule(plaque);
                     Ticket ticket = new Ticket(v1, place.Number, HourlyRate);
                     place.Park(v1, ticket);
-
+                    
+                    Transactions.Add($"ENTREE ({ticket.EntryTime}) - {v1.LicencePlate} (Place n°{place.Number})");
+                    
                     return ticket;
                 }
             }
         }
+        
+        // La méthode pour sortir le véhicule
+        public Ticket? SortVehicle(string? plaque = null, int? place = null, DateTime? exitTime = null)
+        {
+            DateTime tempsFin;
 
-        //La methode pour sortir le vehicule
-        public Ticket? SortVehicle(string? plaque = null, int? place = null)
-        {       
-            foreach (var spot in Spots)                                                          //On fait un boucle pour verifier toutes les places libres
+            if (exitTime != null)
             {
+                tempsFin = exitTime.Value; // Si un temps simulé a été transmis, nous l'utilisons.
+            }
+            else
+            {
+                tempsFin = DateTime.Now;   // Sinon, on prend l'heure actuelle
+            }                                      
 
-                if (spot.IsOccuped == true && spot.Number == place)                              //Si on a entré la place
+            foreach (var spot in Spots)                                                          // On fait une boucle pour vérifier toutes les places
+            {
+                if (spot.IsOccuped == true && spot.Number == place)                              // Si on a entré la place
                 {
-                    Ticket? t = spot.ActiveTicket;                                               //Creation ticket pour le donner après l'annulation
+                    Ticket? t = spot.ActiveTicket;                                               // Création ticket pour le donner après l'annulation
+                    if (t != null)
+                    {
+                        TotalPaid += t.SumPayement(tempsFin);                                                                                                   // On ajoute le montant payé au total du jour
+                        Transactions.Add($"SORTIE ({tempsFin}) - {spot.VehiculePark?.LicencePlate} (Place n°{spot.Number}, {t.SumPayement(tempsFin)} CHF)");
+                    }
                     spot.Release();
                     return t;
                 }
-                if(spot.IsOccuped == true && spot.VehiculePark?.LicencePlate == plaque)          //Si on a entré la plaque
+                if (spot.IsOccuped == true && spot.VehiculePark?.LicencePlate == plaque)                                                                        // Si on a entré la plaque
                 {
                     Ticket? t = spot.ActiveTicket;
+                    if (t != null)
+                    {
+                        TotalPaid += t.SumPayement(tempsFin);                                                                                                   // On ajoute le montant payé au total du jour
+                        Transactions.Add($"SORTIE ({tempsFin}) - {spot.VehiculePark?.LicencePlate} (Place n°{spot.Number}, {t.SumPayement(tempsFin)} CHF)");
+                    }
                     spot.Release();
                     return t;
                 }
-
             }
             return null;
         }
@@ -157,33 +189,74 @@ namespace P_POO_pr55xpt_Parking
             Console.WriteLine();
         }
 
-        //La methode pour sortir le vehicule
-        public void FoundVehicle(string? plaque = null, int? place = null)
+        // La méthode pour rechercher et afficher le véhicule
+        public bool FoundVehicle(string? plaque = null, int? place = null, DateTime? exitTime = null)
         {
-            foreach (var spot in Spots)                                                          //On fait un boucle pour verifier toutes les places libres
-            {
-                if (spot.IsOccuped == true && spot.Number == place)                              //Si on a entré la place
-                {
-                    Ticket? t = spot.ActiveTicket;                                               //Creation ticket pour le donner après l'annulation
-                    Console.WriteLine($"\nVoiture:        {spot.VehiculePark?.LicencePlate} ");
-                    Console.WriteLine($"Place:          {spot.Number} ");
-                    Console.WriteLine($"Heure d'entrée: {spot.ActiveTicket?.EntryTime} ");
-                    Console.WriteLine($"Durée:          {spot.ActiveTicket?.ParkDuration(DateTime.Now)} ");
-                    Console.WriteLine($"Prix à payer:          {spot.ActiveTicket?.SumPayement(DateTime.Now)} ");
-                }
-                if (spot.IsOccuped == true && spot.VehiculePark?.LicencePlate == plaque)          //Si on a entré la plaque
-                {
-                    Ticket? t = spot.ActiveTicket;
-                    Console.WriteLine($"\nVoiture:        {spot.VehiculePark?.LicencePlate} ");
-                    Console.WriteLine($"Place:          {spot.Number} ");
-                    Console.WriteLine($"Heure d'entrée: {spot.ActiveTicket?.EntryTime} ");
-                    Console.WriteLine($"Durée:          {spot.ActiveTicket?.ParkDuration(DateTime.Now)} ");
-                    Console.WriteLine($"Prix à payer:          {spot.ActiveTicket?.SumPayement(DateTime.Now)} ");
-                }
+            DateTime tempsFin = exitTime ?? DateTime.Now;
 
+            foreach (var spot in Spots)                                                          // On fait une boucle pour vérifier toutes les places
+            {
+                if (spot.IsOccuped == true && (spot.Number == place || spot.VehiculePark?.LicencePlate == plaque))
+                {
+                    TimeSpan duree = spot.ActiveTicket!.ParkDuration(tempsFin);
+
+                    Console.WriteLine($"\nVoiture:         {spot.VehiculePark?.LicencePlate}");
+                    Console.WriteLine($"Place:           {spot.Number}");
+                    Console.WriteLine($"Heure d'entrée:  {spot.ActiveTicket.EntryTime}");
+                    Console.WriteLine($"Heure de sortie: {tempsFin}");
+                    Console.WriteLine($"Durée:           {(int)duree.TotalHours}h {duree.Minutes}min {duree.Seconds}s");
+                    Console.WriteLine($"Prix à payer:    {spot.ActiveTicket.SumPayement(tempsFin)} CHF");
+                    return true;
+                }
+            }
+
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("\nAucun véhicule trouvé.");
+            Console.ResetColor();
+            return false;
+        }
+        
+        
+        // La méthode pour afficher les statistiques du jour
+        public void DisplayStatistics()
+        {
+            int placesOccupees = 0;
+            TimeSpan dureeTotale = TimeSpan.Zero;
+
+            foreach (var spot in Spots)
+            {
+                if (spot.IsOccuped == true && spot.ActiveTicket != null)
+                {
+                    placesOccupees++;
+                    dureeTotale += spot.ActiveTicket.ParkDuration(DateTime.Now);                                                                // Additionne la durée de stationnement de tous les véhicules actuellement garés sur le parking.
+                }
+            }
+
+            double pourcentage = (double)placesOccupees / Capacity * 100;                                                                       // Calcule le pourcentage de places occupées
+
+            Console.WriteLine("\n=== STATISTIQUES DU JOUR ===");
+            Console.WriteLine($"Places occupées :        {placesOccupees} / {Capacity}");
+            Console.WriteLine($"Taux d'occupation :      {pourcentage} %");
+            Console.WriteLine($"Montant total payé :     {TotalPaid} CHF");                                                                     // Affiche le montant total en CHF déjà réglé par les véhicules ayant quitté les lieux
+            Console.WriteLine($"Durée totale actuelle :  {(int)dureeTotale.TotalHours}h {dureeTotale.Minutes}min {dureeTotale.Seconds}s");
+        }
+        // La méthode pour afficher l'historique des transactions
+        public void DisplayTransactions()
+        {
+            Console.WriteLine("\n=== HISTORIQUE DES TRANSACTIONS ===");
+
+            if (Transactions.Count == 0)
+            {
+                Console.WriteLine("Aucune transaction effectuée.");
+            }
+            else
+            {
+                foreach (string transaction in Transactions)
+                {
+                    Console.WriteLine(transaction);
+                }
             }
         }
-
         
     }
 }

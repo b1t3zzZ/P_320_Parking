@@ -5,27 +5,36 @@
 
         static void Main(string[] args)
         {
-            Drone drone = new Drone(5, 5, 50, 2, "Drone");
+            Random rand = new Random();
 
+            List<Drone> drones = new List<Drone>();
+
+            drones.Add(new Drone(5, 5, 50, 2, "Drone", false));
+            drones.Add(new Drone(5, 15, 50, 5, "HyperDrone", false));
+
+            
             do
             {
-                if (drone.battery > 0)
+                Thread.Sleep(100);
+                Console.Clear();
+
+                foreach (var drone in drones)
                 {
-                    drone.battery -= 2;
-                    drone.x += 2;
-                    Console.SetCursorPosition(drone.x, drone.y);
-                    AffichageDeDrone();
-                    Thread.Sleep(100);
-                    Console.Clear();
-                }
-                if(drone.battery == 0)
-                {
-                    Console.SetCursorPosition(drone.x, drone.y);
-                    AffichageDeMort();
+
+                    drone.Draw();
+                    if(rand.Next(1,10) == 1)
+                    {
+                        
+                    }
+                    else
+                    {
+                        drone.Move();
+                    }
+
                 }
 
+            } while (drones[0].Dead != true && drones[1].Dead != true);
 
-            } while (drone.battery > 0);
         }
         
     }

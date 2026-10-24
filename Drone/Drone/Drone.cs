@@ -8,46 +8,44 @@ namespace Drone
 {
     internal class Drone
     {
-        public int x , y;
-        public int battery;
-        public int speed;
-        public string name;
-        bool dead;
+        public int X { get; set; }
+        public int Y {get; set;}
+        public int Battery { get; set;}
+        public int Speed { get; set;}
+        public string Name {  get; set;}
+        public bool Dead { get; set; }
 
-        public Drone (int x, int y, int battery, int speed, string name)
+        public Drone (int x, int y, int battery, int speed, string name, bool Dead)
         {
-            this.x = x;
-            this.y = y;
-            this.battery = battery;
-            this.speed = speed;
-            this.name = name;
-            this.dead = false;
+            this.X = x;
+            this.Y = y;
+            this.Battery = battery;
+            this.Speed = speed;
+            this.Name = name;
+            this.Dead = Dead;
         }
-
         internal void Draw()
         {
-            if (!this.dead)
+            if (Battery > 0)
             {
-                Console.ForegroundColor = ConsoleColor.Yellow;
+                Console.SetCursorPosition(this.X, this.Y);
                 Console.WriteLine("x-0-x");
-                Console.ForegroundColor = ConsoleColor.White;
             }
-            else
+            if (X == 50)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
+                Console.SetCursorPosition(this.X, this.Y);
+                this.Dead = true;
                 Console.WriteLine("-----");
-                Console.ForegroundColor = ConsoleColor.White;
             }
         }
-
         internal void Move()
         {
-            switch (Console.ReadKey().Key)
+            if(Battery != 0)
             {
-                case ConsoleKey.DownArrow: y--; break;
+                X += Speed;
+                Battery -= Speed;
             }
+            
         }
-
-
     }
 }

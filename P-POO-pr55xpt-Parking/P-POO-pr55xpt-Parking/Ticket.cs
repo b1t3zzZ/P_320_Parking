@@ -36,8 +36,9 @@ namespace P_POO_pr55xpt_Parking
         {
 
             TimeSpan interval = ParkDuration(exitTime);
-            decimal durationParking = (decimal)interval.TotalHours;
-            return Math.Round(durationParking, 2) * tarifPerHour;
+            decimal hours = (decimal)Math.Ceiling(interval.TotalHours);
+            if (hours == 0) hours = 1;                                           // Minimum 1 heure
+            return Math.Round(hours * tarifPerHour, 2);
 
         }
 

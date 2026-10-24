@@ -52,7 +52,7 @@ namespace P_POO_pr55xpt_Parking
                         //Creation de voiture si la plaque est bien entrée
                         if (plaque != null)
                         {
-                            Ticket? t = p.EnterVehicle(plaque);                                  //Машина создается внутри парковки и возвращает Ticket
+                            Ticket? t = p.EnterVehicle(plaque);                                             //Машина создается внутри метода ентервеикл парковки и возвращает Ticket
 
                             //Et si le ticket existe - afficher le temps d'entrée, place, tarif
                             if (t != null)
@@ -75,29 +75,53 @@ namespace P_POO_pr55xpt_Parking
                         plateOrNum = int.TryParse(reponse, out choiseToSortVehicle);
                         Console.ResetColor();
 
-
-                        //Si plateOrNum = true, alors on a mis numero
+                        // Simulation de la durée 
+                        Console.Write("Simuler combien d'heures de stationnement ? (0 pour temps réel): ");
+                        int.TryParse(Console.ReadLine(), out int heuresSimulees);
+                        
+                        if (heuresSimulees < 0)
+                            heuresSimulees = 0;                                                                     // Empêche d'entrer un nombre d'heures négatif
+                        
+                        DateTime heureSortie = DateTime.Now.AddHours(heuresSimulees);
+                        
+                        // 1. On cherche et affiche d'abord les informations du véhicule
+                        bool vehiculeTrouve;
                         if (plateOrNum)
                         {
-
-                            p.SortVehicle(place: choiseToSortVehicle);                                     //place: "*" - indique qu'on utilise 2 parametre
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("\nVous avez bien liberé votre palce");
-                            Console.ResetColor();
-
+                            vehiculeTrouve = p.FoundVehicle(place: choiseToSortVehicle, exitTime: heureSortie);
                         }
-
-                        //Si plateOrNum = false, alors on a mis plaque
-                        if (!plateOrNum)
-                        {   
-
-                            //Le choiseToSortVehicle est de type int, alors on a besoin 'Convert'
-                            p.SortVehicle(plaque: Convert.ToString(reponse));                  //plaque: "*" - indique qu'on utilise 1 parametre
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine("\nVous avez bien liberé votre palce");
-                            Console.ResetColor();
-
+                        else
+                        {
+                            vehiculeTrouve = p.FoundVehicle(plaque: reponse, exitTime: heureSortie);
                         }
+                        // 2. Si le véhicule existe, on demande confirmation avant de libérer la place
+                        if (vehiculeTrouve)
+                        {
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.Write("\nVoulez-vous réellement sortir le véhicule ? (o/n): ");
+                            string? confirmation = Console.ReadLine();
+                            Console.ResetColor();
+                            if (confirmation == "o" || confirmation == "O")
+                            {
+                                if (plateOrNum)
+                                {
+                                    p.SortVehicle(place: choiseToSortVehicle, exitTime: heureSortie);
+                                }
+                                else
+                                {
+                                    p.SortVehicle(plaque: reponse, exitTime: heureSortie);
+                                }
+                                
+                                Console.ForegroundColor = ConsoleColor.Green;
+                                Console.WriteLine("\nVous avez bien libéré votre place.");
+                                Console.ResetColor();
+                            }
+                            else
+                            {
+                                Console.WriteLine("\nSortie annulée, le véhicule reste dans le parking.");
+                            }
+                        }
+                        
                         Console.Write("\nCliquez sur n'importe quel touche.");
                         Console.ReadKey();
                         break;
@@ -119,23 +143,17 @@ namespace P_POO_pr55xpt_Parking
                         //Si plateOrNum = true, alors on a mis numero
                         if (plateOrNum)
                         {
-                            p.FoundVehicle(place: choiseToSortVehicle);
                             Console.ForegroundColor = ConsoleColor.Green;
-
-                            Console.WriteLine($"");
-
+                            p.FoundVehicle(place: choiseToSortVehicle);
                             Console.ResetColor();
                         }
 
                         //Si plateOrNum = false, alors on a mis plaque
                         if (!plateOrNum)
                         {
+                            Console.ForegroundColor = ConsoleColor.Green;
                             //Le choiseToSortVehicle est de type int, alors on a besoin 'Convert'
                             p.FoundVehicle(plaque: Convert.ToString(reponse));                  //palque: "*" - indique qu'on utilise 1 parametre
-                            Console.ForegroundColor = ConsoleColor.Green;
-
-                            Console.WriteLine();
-
                             Console.ResetColor();
                         }
                         Console.Write("\nCliquez sur n'importe quel touche");
@@ -143,15 +161,29 @@ namespace P_POO_pr55xpt_Parking
                         break;
 
                     case '5':
-
+                        p.DisplayStatistics();
+                        Console.Write("\nCliquez sur n'importe quelle touche.");
+                        Console.ReadKey();
                         break;
 
                     case '6':
-
+                        p.DisplayTransactions();
+                        Console.Write("\nCliquez sur n'importe quelle touche.");
+                        Console.ReadKey();
                         break;
 
                     case '0':
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine("\nAu revoir et merci d'avoir utilisé notre parking!");
+                        Console.ResetColor();
+                        break;
 
+                    default:
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("\nChoix invalide, veuillez entrer un chiffre entre 0 et 6.");
+                        Console.ResetColor();
+                        Console.Write("\nCliquez sur n'importe quelle touche.");
+                        Console.ReadKey();
                         break;
                 }
 

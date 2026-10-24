@@ -22,8 +22,7 @@ namespace P_POO_pr55xpt_Parking
          public static bool IsValidPlate(string plate)
         {
 
-            return Regex.IsMatch(plate, @"^[A-Z]{2}\d{1,6}$");
-
+            return Regex.IsMatch(plate, @"^[A-Za-z]{2}-\d{1,6}$");
         }
 
         //Nouvelle affichage de plaque
