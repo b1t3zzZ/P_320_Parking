@@ -52,7 +52,7 @@ namespace P_POO_pr55xpt_Parking
                         //Creation de voiture si la plaque est bien entrée
                         if (plaque != null)
                         {
-                            Ticket? t = p.EnterVehicle(plaque);                                             //Машина создается внутри метода ентервеикл парковки и возвращает Ticket
+                            Ticket? t = p.EnterVehicle(plaque);                                             //Le véhicule est créé au sein de la méthode `enterVehicle` du parking et renvoie un `Ticket`.
 
                             //Et si le ticket existe - afficher le temps d'entrée, place, tarif
                             if (t != null)
@@ -116,6 +116,7 @@ namespace P_POO_pr55xpt_Parking
                                 Console.WriteLine("\nVous avez bien libéré votre place.");
                                 Console.ResetColor();
                             }
+                            //Si il y a eu une erreure
                             else
                             {
                                 Console.WriteLine("\nSortie annulée, le véhicule reste dans le parking.");

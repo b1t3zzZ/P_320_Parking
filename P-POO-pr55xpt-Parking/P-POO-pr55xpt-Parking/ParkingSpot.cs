@@ -14,8 +14,8 @@ namespace P_POO_pr55xpt_Parking
         public Ticket? ActiveTicket { get; private set;}
 
         public ParkingSpot(int number) 
-        { 
-        
+        {
+            // Initialise le numero de place et la met libre par defaut
             this.Number = number;
             this.IsOccuped = false;
         

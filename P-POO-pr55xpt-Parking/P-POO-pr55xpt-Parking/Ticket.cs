@@ -14,8 +14,10 @@ namespace P_POO_pr55xpt_Parking
         public DateTime EntryTime { get; private set; }
         public decimal tarifPerHour { get; private set; }
 
+        // Initialise le ticket et prend l'heure actuelle comme heure d'entree
         public Ticket(Vehicule vehicule, int place, decimal tarif) 
         {
+
             this.VehiculePark = vehicule;
             this.tarifPerHour = tarif;
             this.GivenPlace = place;
